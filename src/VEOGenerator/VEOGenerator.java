@@ -912,7 +912,13 @@ public class VEOGenerator {
         if (cert != null) {
             subject = cert.getSubjectDN();
             if (subject != null) {
-                outputDataToVeo(cs.encode(subject.toString()));
+                String s = subject.toString();
+
+                // encode XML characters
+                s = s.replaceAll("&", "&amp;");
+                s = s.replaceAll("<", "&lt;");
+                s = s.replaceAll(">", "&gt;");
+                outputDataToVeo(cs.encode(s));
             } else {
                 outputDataToVeo(cs.encode("unknown subject"));
             }
