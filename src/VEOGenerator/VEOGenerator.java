@@ -153,9 +153,8 @@ public class VEOGenerator {
     int REC_ENDED = 8;	// record ended
     int FILE_ENDED = 20;	// file started
     int VEO_ENDED = 100;	// veo completed
-    
-    // FileWriter fw;           // use when outputing the byte stream being signed
 
+    // FileWriter fw;           // use when outputing the byte stream being signed
     /**
      * Construct a VEOGenerator instance given a directory in which encoding
      * templates are located. Encoding templates are used to construct
@@ -205,7 +204,7 @@ public class VEOGenerator {
         int i, j;
         Fragment f;
         String id;
-        
+
         // Utilities
         b64 = new B64();
         try {
@@ -410,7 +409,7 @@ public class VEOGenerator {
         outputDataToVeo(cs.encode(contentsVEO1));
 
         state = VEO_STARTED;
-        
+
         // use the following when it is necessary to output the byte stream
         // being signed
         /*
@@ -419,8 +418,7 @@ public class VEOGenerator {
         } catch (IOException ioe) {
             System.err.println(ioe.toString());
         }
-        */
-
+         */
     }
 
     /**
@@ -496,7 +494,7 @@ public class VEOGenerator {
                     + "endVEO() has already been called on this VEO");
         }
         state = VEO_ENDED;
-        
+
         // use the following when it is necessary to output the byte stream being signed
         /*
         try {
@@ -504,8 +502,7 @@ public class VEOGenerator {
         } catch (IOException ioe) {
             //
         }
-        */
-
+         */
         // end calculating signature
         signing = false;
 
@@ -1719,7 +1716,7 @@ public class VEOGenerator {
                                 fw.write(b[k]);
                             }
                         }
-                        */
+                         */
                     }
                 }
             }
@@ -1780,8 +1777,12 @@ public class VEOGenerator {
                             continue;
                         }
                         s.update(b);
-                        if (i==0) {
-                        fw.write(b); }
+                        // code to capture byte stream
+                        /*
+                        if (i == 0) {
+                            fw.write(b);
+                        }
+                        */
                     }
                 }
             }
