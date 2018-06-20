@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -152,6 +153,8 @@ public class VEOGenerator {
     int REC_ENDED = 8;	// record ended
     int FILE_ENDED = 20;	// file started
     int VEO_ENDED = 100;	// veo completed
+    
+    // FileWriter fw;           // use when outputing the byte stream being signed
 
     /**
      * Construct a VEOGenerator instance given a directory in which encoding
@@ -202,7 +205,7 @@ public class VEOGenerator {
         int i, j;
         Fragment f;
         String id;
-
+        
         // Utilities
         b64 = new B64();
         try {
@@ -407,6 +410,17 @@ public class VEOGenerator {
         outputDataToVeo(cs.encode(contentsVEO1));
 
         state = VEO_STARTED;
+        
+        // use the following when it is necessary to output the byte stream
+        // being signed
+        /*
+        try {
+            fw = new FileWriter("Sig.txt");
+        } catch (IOException ioe) {
+            System.err.println(ioe.toString());
+        }
+        */
+
     }
 
     /**
@@ -482,6 +496,15 @@ public class VEOGenerator {
                     + "endVEO() has already been called on this VEO");
         }
         state = VEO_ENDED;
+        
+        // use the following when it is necessary to output the byte stream being signed
+        /*
+        try {
+            fw.close();
+        } catch (IOException ioe) {
+            //
+        }
+        */
 
         // end calculating signature
         signing = false;
@@ -1668,7 +1691,6 @@ public class VEOGenerator {
     public void outputDataToVeo(byte[] b)
             throws VEOError {
         String name = "Fragment.outputDataToVeo(): ";
-        ByteBuffer bb;
         int i, j;
         Signature s;
 
@@ -1689,6 +1711,15 @@ public class VEOGenerator {
                             continue;
                         }
                         s.update(b[j]);
+                        // use the following when it is necessary to output the
+                        // byte stream being signed
+                        /*
+                        if (i==0) {
+                            for (int k=0; k<b.length; k++){
+                                fw.write(b[k]);
+                            }
+                        }
+                        */
                     }
                 }
             }
@@ -1749,6 +1780,8 @@ public class VEOGenerator {
                             continue;
                         }
                         s.update(b);
+                        if (i==0) {
+                        fw.write(b); }
                     }
                 }
             }
