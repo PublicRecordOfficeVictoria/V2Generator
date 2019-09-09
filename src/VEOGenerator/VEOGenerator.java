@@ -850,7 +850,36 @@ public class VEOGenerator {
             + "FIPS PUB 186-2, National Institute of Standards and Technology\r\n"
             + "US Department of Commerce, 27 January 2000,\r\n"
             + "(http://csrc.nist.gov/publications/fips/fips186-2/fip186-2-change1.pdf).";
-
+    static String contentsSig4c
+            = "  <vers:SignatureFormatDescription>\r\n"
+            + "The contents of this VEO is signed using SHA-256 hash algorithm and RSA\r\n"
+            + "digital signature algorithm. SHA-256 is defined in Secure Hash Standard,\r\n"
+            + "FIPS PUB 180-4, National Institute of Standards and Technology, US\r\n"
+            + "Department of Commerce, August 2015,\r\n"
+            + "(https://doi.org/10.6028/NIST.FIPS.180-4).\r\n"
+            + "The RSA algorithm (RSASSA-PKCS-v1_5) is defined in PKCS #1 v2.1: RSA\r\n"
+            + "Cryptography Standard, RSA Laboratories, 14 June 2002,\r\n"
+            + "(ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-1/pkcs-1v2-1.pdf).\r\n";
+    static String contentsSig4d
+            = "  <vers:SignatureFormatDescription>\r\n"
+            + "The contents of this VEO is signed using SHA-384 hash algorithm and RSA\r\n"
+            + "digital signature algorithm. SHA-384 is defined in Secure Hash Standard,\r\n"
+            + "FIPS PUB 180-4, National Institute of Standards and Technology, US\r\n"
+            + "Department of Commerce, August 2015,\r\n"
+            + "(https://doi.org/10.6028/NIST.FIPS.180-4).\r\n"
+            + "The RSA algorithm (RSASSA-PKCS-v1_5) is defined in PKCS #1 v2.1: RSA\r\n"
+            + "Cryptography Standard, RSA Laboratories, 14 June 2002,\r\n"
+            + "(ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-1/pkcs-1v2-1.pdf).\r\n";
+    static String contentsSig4e
+            = "  <vers:SignatureFormatDescription>\r\n"
+            + "The contents of this VEO is signed using SHA-512 hash algorithm and RSA\r\n"
+            + "digital signature algorithm. SHA-512 is defined in Secure Hash Standard,\r\n"
+            + "FIPS PUB 180-4, National Institute of Standards and Technology, US\r\n"
+            + "Department of Commerce, August 2015,\r\n"
+            + "(https://doi.org/10.6028/NIST.FIPS.180-4).\r\n"
+            + "The RSA algorithm (RSASSA-PKCS-v1_5) is defined in PKCS #1 v2.1: RSA\r\n"
+            + "Cryptography Standard, RSA Laboratories, 14 June 2002,\r\n"
+            + "(ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-1/pkcs-1v2-1.pdf).\r\n";
     static String contentsSig5
             = "Details of the public keys are encoded as X.509 certificates in the\r\n"
             + "vers:CertificateBlock elements. X.509 certificates are define in\r\n"
@@ -918,11 +947,24 @@ public class VEOGenerator {
         String s;
 
         // output description of algorithms used
-        if (algorithmId.equals("SHA1withRSA")) {
-            outputDataToVeo(cs.encode(contentsSig4a));
-        }
-        if (algorithmId.equals("SHA1withDSA")) {
-            outputDataToVeo(cs.encode(contentsSig4b));
+        switch (algorithmId) {
+            case "SHA1withDSA":
+                outputDataToVeo(cs.encode(contentsSig4b));
+                break;
+            case "SHA1withRSA":
+                outputDataToVeo(cs.encode(contentsSig4a));
+                break;
+            case "SHA256withRSA":
+                outputDataToVeo(cs.encode(contentsSig4c));
+                break;
+            case "SHA384withRSA":
+                outputDataToVeo(cs.encode(contentsSig4d));
+                break;
+            case "SHA512withRSA":
+                outputDataToVeo(cs.encode(contentsSig4e));
+                break;
+            default:
+                throw new VEOError(name + " Unsupported algorithm identifier: '" + algorithmId + "'");
         }
 
         // output description of calculating signature
@@ -938,12 +980,6 @@ public class VEOGenerator {
         switch (algorithmId) {
             case "SHA1withDSA":
                 s = "1.2.840.10040.4.3";
-                break;
-            case "MD2withRSA":
-                s = "1.2.840.113549.1.1.2";
-                break;
-            case "MD5withRSA":
-                s = "1.2.840.113549.1.1.4";
                 break;
             case "SHA1withRSA":
                 s = "1.2.840.113549.1.1.5";
