@@ -142,8 +142,8 @@ private void testParseTemplate() {
 	try {
 		ds = new ArrayDataSource(data);
 		vg.startVEO(new File("testdata/subsTest.veo"), 1, 1);
-		vg.addSignatureBlock(signer);
-		vg.addLockSignatureBlock(1, signer);
+		vg.addSignatureBlock(signer, "SHA1");
+		vg.addLockSignatureBlock(1, signer, "SHA1");
 		vg.addFile(f, ds);
 		vg.endVEO();
 	} catch (VEOError e) {
@@ -200,7 +200,7 @@ private void testAddSignatureBlock() {
 	}
 	System.out.println("*testAddSignatureBlock(): called before startVEO");
 	try {
-		v.addSignatureBlock(signer);
+		v.addSignatureBlock(signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
@@ -212,15 +212,15 @@ private void testAddSignatureBlock() {
 	}
 	System.out.println("*testAddSignatureBlock(): null signer");
 	try {
-		v.addSignatureBlock(null);
+		v.addSignatureBlock(null, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testAddSignatureBlock(): called after addLockSigBlock()");
 	try {
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
-		v.addSignatureBlock(signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
+		v.addSignatureBlock(signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
@@ -242,45 +242,45 @@ private void testAddLockSignatureBlock() {
 	}
 	System.out.println("*testLockAddSignatureBlock(): called before addSignatureBlock");
 	try {
-		v.addLockSignatureBlock(1, signer);
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 
 	try {
-		v.addSignatureBlock(signer);
+		v.addSignatureBlock(signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testLockAddSignatureBlock(): 0 sig block ref");
 	try {
-		v.addLockSignatureBlock(0, signer);
+		v.addLockSignatureBlock(0, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testLockAddSignatureBlock(): 2 sig block ref");
 	try {
-		v.addLockSignatureBlock(2, signer);
+		v.addLockSignatureBlock(2, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testLockAddSignatureBlock(): null signer");
 	try {
-		v.addLockSignatureBlock(1, null);
+		v.addLockSignatureBlock(1, null, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testLockAddSignatureBlock(): called twice");
 	try {
-		v.addLockSignatureBlock(1, signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addLockSignatureBlock(1, signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
 	System.out.println("*testLockAddSignatureBlock(): called after startRecord()");
 	try {
 		v.startRecord(rMeta, tds);
-		v.addLockSignatureBlock(1, signer);
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
@@ -297,7 +297,7 @@ private void testStartRecord() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
+		v.addSignatureBlock(signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println("Panic1: "+e.getMessage());
 	}
@@ -309,7 +309,7 @@ private void testStartRecord() {
 	}
 
 	try {
-		v.addLockSignatureBlock(1, signer);
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
@@ -352,8 +352,8 @@ private void testStartDocument() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println("Panic1: "+e.getMessage());
 	}
@@ -416,8 +416,8 @@ private void testAddEncoding() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 		v.startRecord(rMeta, tds);
 	} catch (VEOError e) {
 		System.out.println("Panic1: "+e.getMessage());
@@ -473,8 +473,8 @@ private void testEndDocument() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 		v.startRecord(rMeta, tds);
 		v.startDocument(dMeta, tds);
 	} catch (VEOError e) {
@@ -519,8 +519,8 @@ private void testEndRecord() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 		v.startRecord(rMeta, tds);
 		v.startDocument(dMeta, tds);
 		v.addEncoding(new File("testdata/test.pdf"));
@@ -566,8 +566,8 @@ private void testEndVEO() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("test.veo"), 1, 1);
-		v.addSignatureBlock(signer);
-		v.addLockSignatureBlock(1, signer);
+		v.addSignatureBlock(signer, "SHA1");
+		v.addLockSignatureBlock(1, signer, "SHA1");
 		v.startRecord(rMeta, tds);
 		v.startDocument(dMeta, tds);
 		v.addEncoding(new File("testdata/test.pdf"));
@@ -607,7 +607,7 @@ private void testAddFile() {
 	try {
 		v = new VEOGenerator(new File("testdata/encDirectory"), args);
 		v.startVEO(new File("testFile.veo"), 1, 1);
-		v.addSignatureBlock(signer);
+		v.addSignatureBlock(signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println("Panic1: "+e.getMessage());
 	}
@@ -619,7 +619,7 @@ private void testAddFile() {
 	}
 
 	try {
-		v.addLockSignatureBlock(1, signer);
+		v.addLockSignatureBlock(1, signer, "SHA1");
 	} catch (VEOError e) {
 		System.out.println(e.getMessage());
 	}
@@ -660,9 +660,9 @@ private void testMultiple() {
 	try {
 		tds = new TableDataSource(new File("testdata\\dataSource.txt"));
 		vg.startVEO(new File("testdata\\multiple.veo"), 1, 1);
-		vg.addSignatureBlock(signer);
-		vg.addSignatureBlock(signer);
-		vg.addLockSignatureBlock(2, signer);
+		vg.addSignatureBlock(signer, "SHA1");
+		vg.addSignatureBlock(signer, "SHA1");
+		vg.addLockSignatureBlock(2, signer, "SHA1");
 		vg.startRecord(rMeta, tds);
 		tds.getNextRow();
 		vg.startDocument(dMeta, tds);

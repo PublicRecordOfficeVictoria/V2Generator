@@ -10,6 +10,7 @@ package VEOGenerator;
  * Andrew Waugh (andrew.waugh@dvc.vic.gov.au) Copyright 2006 PROV
  *
  * v1.1 20071203 Added includeSignedObject()
+ * v1.2 20190909 Added support for hash algorithms other than SHA1
  *
  *************************************************************
  */
@@ -599,9 +600,9 @@ public class VEOGenerator {
      * revisionId passed to startVEO). The second signature block added has the
      * vers:id 'Revision-&lt;rev&gt;-Signature-2' and so on.
      * <p>
-     * The signature algorithms are automatically set. The hash algorithm is
-     * always SHA1. The encryption algorithm is derived from the private key
-     * passed in signer
+     * The signature algorithms are automatically set. The hash algorithm is one
+     * of "SHA1", "SHA256", "SHA384", or "SHA512". The encryption algorithm is
+     * derived from the private key passed in signer
      * <p>
      * This method will generate a VEOError in the following situations:
      * <ul>
@@ -615,9 +616,10 @@ public class VEOGenerator {
      * </ul>
      *
      * @param signer PFXUser representing the signer.
+     * @param hashAlg The hash algorithm to use
      * @throws VEOError if a fatal error occurs
      */
-    public void addSignatureBlock(PFXUser signer)
+    public void addSignatureBlock(PFXUser signer, String hashAlg)
             throws VEOError {
         String name = "VEOGenerator.addSignatureBlock(): ";
         Long posn;
@@ -626,6 +628,18 @@ public class VEOGenerator {
         String algorithmId;
 
         // sanity checks
+        switch (hashAlg) {
+            // case "NONE":
+            // case "MD2":
+            // case "MD5":
+            case "SHA1":
+            case "SHA256":
+            case "SHA384":
+            case "SHA512":
+                break;
+            default:
+                throw new VEOError(name + "unknown hash algorithm: '" + hashAlg + "'");
+        }
         if (veo == null) {
             throw new VEOError(name + "VEO has not been started");
         }
@@ -649,7 +663,7 @@ public class VEOGenerator {
             throw new VEOError(name
                     + "failed to get private key from signer");
         }
-        algorithmId = "SHA1with" + priKey.getAlgorithm();
+        algorithmId = hashAlg + "with" + priKey.getAlgorithm();
 
         outputDataToVeo(cs.encode(contentsSig1a));
         outputDataToVeo(cs.encode(Integer.toString(revisionId)));
@@ -699,10 +713,10 @@ public class VEOGenerator {
      * lock signature, '2' means the second signature block, and so on.
      * <p>
      * The <code>signer</code> contains the information necessary to create a
-     * digital signature (the private key and the certificate chain). The
-     * signature algorithms are automatically set. The hash algorithm is always
-     * SHA1. The encryption algorithm is derived from the private key passed in
-     * signer
+     * digital signature (the private key and the certificate chain).
+     * The signature algorithms are automatically set. The hash algorithm is one
+     * of "SHA1", "SHA256", "SHA384", or "SHA512". The encryption algorithm is
+     * derived from the private key passed in signer
      * <p>
      * This method will generate a VEOError in the following situations:
      * <ul>
@@ -721,15 +735,28 @@ public class VEOGenerator {
      * @param id	identifier of the signature block containing the signature to
      * be signed
      * @param signer	Instance representing the signer.
+     * @param hashAlg The hash algorithm to use
      * @throws VEOError if a fatal error occurs
      */
-    public void addLockSignatureBlock(int id, PFXUser signer)
+    public void addLockSignatureBlock(int id, PFXUser signer, String hashAlg)
             throws VEOError {
         String name = "VEOGenerator.addLockSignatureBlock(): ";
         PrivateKey priKey;
         String algorithmId;
 
         // sanity checks
+        switch (hashAlg) {
+            // case "NONE":
+            // case "MD2":
+            // case "MD5":
+            case "SHA1":
+            case "SHA256":
+            case "SHA384":
+            case "SHA512":
+                break;
+            default:
+                throw new VEOError(name + "unknown hash algorithm: '" + hashAlg + "'");
+        }
         if (veo == null) {
             throw new VEOError(name + "VEO has not been started");
         }
@@ -768,7 +795,7 @@ public class VEOGenerator {
             throw new VEOError(name
                     + "failed to get private key from signer");
         }
-        algorithmId = "SHA1with" + priKey.getAlgorithm();
+        algorithmId = hashAlg + "with" + priKey.getAlgorithm();
 
         // generate lock signature block
         outputDataToVeo(cs.encode(contentsSig1b));
@@ -888,6 +915,7 @@ public class VEOGenerator {
         byte[] b;
         Signature sig;
         Principal subject;
+        String s;
 
         // output description of algorithms used
         if (algorithmId.equals("SHA1withRSA")) {
@@ -907,19 +935,32 @@ public class VEOGenerator {
 
         // output signature algorithm id
         outputDataToVeo(cs.encode(contentsSig6));
-        if (algorithmId.equals("SHA1withDSA")) {
-            outputDataToVeo(cs.encode("1.2.840.10040.4.3"));
+        switch (algorithmId) {
+            case "SHA1withDSA":
+                s = "1.2.840.10040.4.3";
+                break;
+            case "MD2withRSA":
+                s = "1.2.840.113549.1.1.2";
+                break;
+            case "MD5withRSA":
+                s = "1.2.840.113549.1.1.4";
+                break;
+            case "SHA1withRSA":
+                s = "1.2.840.113549.1.1.5";
+                break;
+            case "SHA256withRSA":
+                s = "1.2.840.113549.1.1.11";
+                break;
+            case "SHA384withRSA":
+                s = "1.2.840.113549.1.1.12";
+                break;
+            case "SHA512withRSA":
+                s = "1.2.840.113549.1.1.13";
+                break;
+            default:
+                throw new VEOError(name + " Unsupported algorithm identifier: '" + algorithmId + "'");
         }
-        if (algorithmId.equals("MD2withRSA")) {
-            outputDataToVeo(cs.encode("1.2.840.113549.1.1.2"));
-        }
-        if (algorithmId.equals("MD5withRSA")) {
-            outputDataToVeo(cs.encode("1.2.840.113549.1.1.4"));
-        }
-        if (algorithmId.equals("SHA1withRSA")) {
-            outputDataToVeo(cs.encode("1.2.840.113549.1.1.5"));
-        }
-
+        outputDataToVeo(cs.encode(s));
         outputDataToVeo(cs.encode(contentsSig7));
 
         // output date
@@ -932,7 +973,7 @@ public class VEOGenerator {
         if (cert != null) {
             subject = cert.getSubjectDN();
             if (subject != null) {
-                String s = subject.toString();
+                s = subject.toString();
 
                 // encode XML characters
                 s = s.replaceAll("&", "&amp;");
@@ -1782,7 +1823,7 @@ public class VEOGenerator {
                         if (i == 0) {
                             fw.write(b);
                         }
-                        */
+                         */
                     }
                 }
             }
@@ -1857,8 +1898,8 @@ public class VEOGenerator {
 
                 // start VEO, adding signature and lock signature blocks
                 vg.startVEO(veo, seqNo, 1);
-                vg.addSignatureBlock(signer);
-                vg.addLockSignatureBlock(1, signer);
+                vg.addSignatureBlock(signer, "SHA1");
+                vg.addLockSignatureBlock(1, signer, "SHA1");
 
                 // start record, including documents and and encodings
                 vg.startRecord(rData, tds);

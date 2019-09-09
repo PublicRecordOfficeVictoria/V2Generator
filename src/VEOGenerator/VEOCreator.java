@@ -17,6 +17,7 @@ import java.util.LinkedList;
  * 1.1	20090516 Generalised BuildVEOs() to take a variety of DataSources
  * 1.2	20100604 Altered buildNewVEO() to call vg.cleanUpAfterError() whenever
  * 		 an error occurs
+ * 1.3  20190909 Added support for hash algorithms other than SHA1
  *
  **************************************************************/
 
@@ -133,6 +134,7 @@ public class VEOCreator {
 	File templateDir;// directory in which the templates are found
 	boolean noDataFile; // true data file is to be passed when building VEOs
 	File dataFile;	// the data file which is to control production
+        String hashAlg; // hash algorithm to use
 	File pfxFile;	// PFX file containing infor about the signer
 	PFXUser signer;	// signer information
 	String passwd;	// password for the PFX file
@@ -159,6 +161,7 @@ public VEOCreator(String args[]) {
 	templateDir = null;
 	noDataFile = false;
 	dataFile = null;
+        hashAlg = "SHA1";
 	signer = null;
 	passwd = null;
 	outputDir = null;
@@ -214,7 +217,7 @@ public VEOCreator(String args[]) {
  */
 private void configure(String args[]) {
 	int i;
-	String usage = "veoCreator [-v] -t <templateDir> [-d <dataFile>| -nd] -s <pfxFile> [-p <password>] [-o <outputDir>]";
+	String usage = "veoCreator [-v] [-h <hashAlg>] -t <templateDir> [-d <dataFile>| -nd] -s <pfxFile> [-p <password>] [-o <outputDir>]";
 	String s;
 
 	// process command line arguments
@@ -222,6 +225,14 @@ private void configure(String args[]) {
 	try {
 	while (i < args.length) {
 
+            	// get password
+		if (args[i].toLowerCase().equals("-h")) {
+			i++;
+			hashAlg = args[i];
+			i++;
+			continue;
+		}
+                
 		// get template directory
 		if (args[i].toLowerCase().equals("-t")) {
 			i++;
@@ -482,8 +493,8 @@ private void buildNewVEO(int seqNo, DataSource tds) throws VEOError {
 	// start VEO
 	vg.startVEO(veo, seqNo, 1);
 	try {
-		vg.addSignatureBlock(signer);
-		vg.addLockSignatureBlock(1, signer);
+		vg.addSignatureBlock(signer, hashAlg);
+		vg.addLockSignatureBlock(1, signer, hashAlg);
 	} catch (VEOError ve) {
 		vg.cleanUpAfterError();
 		throw new VEOError(ve.getMessage());
