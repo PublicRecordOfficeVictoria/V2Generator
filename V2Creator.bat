@@ -1,7 +1,7 @@
 @echo off
-rem set code="C:\Users\Andrew\Documents\Work\VERS-2015\VPA"
-rem set bin="C:\Program Files\Java\jdk1.8.0_162\bin"
-set code="J:\PROV\TECHNOLOGY MANAGEMENT\Application Development\VERS\VERS-1999\V2Generator"
-set bin="C:\Program Files\Java\jdk1.8.0_144\bin"
-set versclasspath=%code%/dist/*
-%bin%\java -classpath %versclasspath% VEOGenerator.VEOGenerator %*
+if exist "J:/PROV/TECHNOLOGY MANAGEMENT/Application Development/VERS/VERSCode" (
+	set code="J:/PROV/TECHNOLOGY MANAGEMENT/Application Development/VERS/VERSCode"
+) else (
+	set code="C:/Users/Andrew/Documents/Work/VERSCode"
+)
+java -classpath %code%/V2Generator/dist/* VEOGenerator.VEOCreator %*
