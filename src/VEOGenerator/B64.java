@@ -1,9 +1,3 @@
-package VEOGenerator;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
 /***************************************************************
  *
  * B 6 4
@@ -14,12 +8,21 @@ import java.nio.ByteBuffer;
  *
  **************************************************************/
 
+package VEOGenerator;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
 /**
  * This class encapsulates routines to encode and decode from Base64.
  * Base64 is defined in RFC 2045 Multipurpose Internet Mail Extensions
  * (MIME) Part One: Format of Internet Message Bodies, section 6.8.
  * <p>
  * For speed, the routines directly encode and decode into UTF-8.
+ * <p>
+ * VEOGenerator doesn't use the B64 class in VERSCommon because the output of
+ * toBase64() is passed directly to a VEOGenerator for speed.
  **/
 public class B64 {
 
@@ -218,7 +221,7 @@ private static final byte[] CHAR_MAP_DEC = {
  * @param	bout	the 3 output bytes (24 bits)
  * @return      number of valid bytes in output array
  */
-public int fromBase64(byte[] bin, byte[] bout) {
+private int fromBase64(byte[] bin, byte[] bout) {
 	int length;
 	byte[] b;
 
