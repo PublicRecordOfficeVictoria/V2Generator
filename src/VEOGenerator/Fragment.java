@@ -1,5 +1,6 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -127,8 +128,7 @@ abstract public class Fragment {
      * @throws VEOError if a fatal error occurs
      *
      */
-    static public Fragment parseTemplate(File template, String[] args)
-            throws VEOError {
+    static public Fragment parseTemplate(File template, String[] args) throws VEOError {
         FileReader fr;
         LineNumberReader lnr;
         Fragment fs, fe, fn;

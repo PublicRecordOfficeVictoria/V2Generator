@@ -1,5 +1,7 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
+
 /**
  * *************************************************************
  *
@@ -34,7 +36,7 @@ public class StringFragment extends Fragment {
     /**
      * Output the static string to the VEO.
      *
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)

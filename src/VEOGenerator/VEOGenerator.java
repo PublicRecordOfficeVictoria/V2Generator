@@ -1,7 +1,6 @@
 package VEOGenerator;
 
 /**
- * *************************************************************
  *
  * V E O G E N E R A T O R
  *
@@ -12,13 +11,13 @@ package VEOGenerator;
  * v1.1 20071203 Added includeSignedObject()
  * v1.2 20190909 Added support for hash algorithms other than SHA1
  *
- *************************************************************
  */
+import VERSCommon.PFXUser;
+import VERSCommon.VEOError;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -156,6 +155,7 @@ public class VEOGenerator {
     int VEO_ENDED = 100;	// veo completed
 
     // FileWriter fw;           // use when outputing the byte stream being signed
+    
     /**
      * Construct a VEOGenerator instance given a directory in which encoding
      * templates are located. Encoding templates are used to construct
@@ -1005,7 +1005,7 @@ public class VEOGenerator {
         outputDataToVeo(cs.encode(contentsSig8));
 
         // output signer
-        cert = signer.getX509Certificate(0);
+        cert = signer.getX509CertificateFromChain(0);
         if (cert != null) {
             subject = cert.getSubjectDN();
             if (subject != null) {
@@ -1040,7 +1040,7 @@ public class VEOGenerator {
         // output certificates
         for (i = 0; i < signer.getCertificateChainLength(); i++) {
             outputDataToVeo(cs.encode(contentsSig12));
-            b = signer.getCertificate(i);
+            b = signer.getCertificateFromChain(i);
             outputDataToVeo(b64.toBase64(b));
             outputDataToVeo(cs.encode(contentsSig13));
         }

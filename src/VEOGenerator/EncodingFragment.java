@@ -1,5 +1,6 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
 import java.io.File;
 
 /**
@@ -67,7 +68,7 @@ public class EncodingFragment extends Fragment {
      * {@link VEOGenerator#addEncoding} method of {@link VEOGenerator} it is
      * only necessary to pass a single colunn.
      *
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)

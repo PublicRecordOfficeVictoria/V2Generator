@@ -12,6 +12,7 @@ package VEOGenerator;
  *
  *************************************************************
  */
+import VERSCommon.VEOError;
 import java.util.*;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,7 @@ public class DateFragment extends Fragment {
      * Output the current data and time (in VERS format) to the VEO. The
      * DataSource is not used.
      *
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)

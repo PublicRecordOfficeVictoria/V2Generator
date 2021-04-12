@@ -1,5 +1,7 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
+
 /**
  * *************************************************************
  *
@@ -48,7 +50,7 @@ public class ColumnFragment extends Fragment {
      *
      * @param data
      * @param veo
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)

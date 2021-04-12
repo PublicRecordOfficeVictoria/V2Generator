@@ -1,5 +1,7 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
+
 /**
  * *************************************************************
  *
@@ -29,7 +31,7 @@ public class SequenceNoFragment extends Fragment {
     /**
      * Output the current sequence number to the VEO.
      *
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)

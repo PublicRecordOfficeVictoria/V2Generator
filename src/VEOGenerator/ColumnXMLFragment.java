@@ -1,5 +1,7 @@
 package VEOGenerator;
 
+import VERSCommon.VEOError;
+
 /**
  * *************************************************************
  *
@@ -46,7 +48,7 @@ public class ColumnXMLFragment extends Fragment {
      * Extract the specified column from the DataSource and output it to the
      * VEO.
      *
-     * @throws VEOGenerator.VEOError
+     * @throws VEOError
      */
     @Override
     public void finalise(DataSource data, VEOGenerator veo)
