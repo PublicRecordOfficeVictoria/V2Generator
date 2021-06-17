@@ -50,7 +50,7 @@ $$ date $$
       </vers:DateTimeClosed>
      </vers:Date>
      <naa:AggregationLevel>
-      Item
+      File
      </naa:AggregationLevel>
      <naa:ManagementHistory>
       <vers:ManagementEvent>
