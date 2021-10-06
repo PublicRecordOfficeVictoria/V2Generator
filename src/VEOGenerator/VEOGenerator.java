@@ -1007,7 +1007,7 @@ public class VEOGenerator {
         // output signer
         cert = signer.getX509CertificateFromChain(0);
         if (cert != null) {
-            subject = cert.getSubjectDN();
+            subject = cert.getSubjectX500Principal();
             if (subject != null) {
                 s = subject.toString();
 
