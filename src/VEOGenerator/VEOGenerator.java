@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -415,11 +416,12 @@ public class VEOGenerator {
         // being signed
         /*
         try {
-            fw = new FileWriter("Sig.txt");
+            fos = new FileOutputStream("Sig.txt");
+            fw = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
         } catch (IOException ioe) {
             System.err.println(ioe.toString());
         }
-         */
+        */
     }
 
     /**

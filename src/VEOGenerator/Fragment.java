@@ -2,9 +2,11 @@ package VEOGenerator;
 
 import VERSCommon.VEOError;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
@@ -129,7 +131,8 @@ abstract public class Fragment {
      *
      */
     static public Fragment parseTemplate(File template, String[] args) throws VEOError {
-        FileReader fr;
+        FileInputStream fis;
+        InputStreamReader isr;
         LineNumberReader lnr;
         Fragment fs, fe, fn;
         int c, j;
@@ -153,7 +156,8 @@ abstract public class Fragment {
         }
         // open file & instantiate a line number reader with it
         try {
-            fr = new FileReader(template);
+            fis = new FileInputStream(template);
+            isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
         } catch (FileNotFoundException fnfe) {
             try {
                 s = template.getCanonicalPath();
@@ -166,7 +170,7 @@ abstract public class Fragment {
                     "Template file '" + s + "' does not exist"
                     + "(" + name + ")");
         }
-        lnr = new LineNumberReader(fr);
+        lnr = new LineNumberReader(isr);
         filename = template.getName();
 
         // go through each character in file. Put the characters in a string
@@ -243,7 +247,15 @@ abstract public class Fragment {
 
         // close template
         try {
-            fr.close();
+            lnr.close();
+        } catch (IOException ioe) {
+            /* ignore */ }
+        try {
+            isr.close();
+        } catch (IOException ioe) {
+            /* ignore */ }
+        try {
+            fis.close();
         } catch (IOException ioe) {
             /* ignore */ }
 

@@ -154,6 +154,7 @@ public class VEOCreator {
      * 20180909 1.4 Added support for other hash algorithms than SHA-1
      * 20210412 2.0 Added version, and standardised reporting in run. Integrated with VERSCommon (PFXUser, VEOError, VEOFatal)
      * 20210709 2.1 Added support for PISA (BAT file)
+     * 20220408 2.2 Forced Readers & Writers to use UTF-8
      * </pre>
      */
     static String version() {
